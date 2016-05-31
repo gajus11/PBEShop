@@ -1,4 +1,0 @@
-coverage==4.1
-Django==1.9.6
-django-jenkins==0.18.1
-selenium==2.53.2
