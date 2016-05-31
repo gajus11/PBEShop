@@ -58,3 +58,25 @@ class ProductListTest(TestCase):
 
     def test_context_products_show_available(self):
         pass
+
+class ProductDetailTest(TestCase):
+
+    def setUp(self):
+        category = Category(name='first category', slug='first-category')
+        category.save()
+
+        Product.objects.create(category=category,
+                               name='first',
+                               slug='first',
+                               price=Decimal(1),
+                               stock=1,
+                               available=True)
+
+    def test_render_correct_template(self):
+        pass
+
+    def test_context_product_show_by_slug(self):
+        pass
+
+    def test_context_product_404(self):
+        pass
