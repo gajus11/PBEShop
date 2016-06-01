@@ -8,6 +8,12 @@ from ..models import Category, Product
 
 class CategoryModelTest(TestCase):
 
+    def test_get_absolute_url(self):
+        Category.objects.create(name='name', slug='slug')
+        category = Category.objects.first()
+        self.assertEqual(category.get_absolute_url(), '/%s/' % (category.slug))
+
+
     def test_string_representation(self):
         category = Category(name='name', slug='slug')
         self.assertEqual(str(category), 'name')
@@ -41,6 +47,18 @@ class CategoryModelTest(TestCase):
         self.assertEqual(str(Category.objects.first()), 'a')
 
 class ProductModelTest(TestCase):
+
+    def test_get_absolute_url(self):
+        Category.objects.create(name='name', slug='slug')
+        category = Category.objects.first()
+        product = Product.objects.create(category=category,
+                                         name='name',
+                                         slug='slug',
+                                         description='desc',
+                                         price=Decimal(1),
+                                         stock=1,
+                                         available=True)
+        self.assertEqual(product.get_absolute_url(), '/%d/%s/' % (product.id, product.slug))
 
     def test_save_correct_product(self):
         Category.objects.create(name='name', slug='slug')

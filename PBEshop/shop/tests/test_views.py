@@ -41,23 +41,39 @@ class ProductListTest(TestCase):
                                available=False)
 
     def test_render_correct_template(self):
-        pass
+        response = self.client.get('/')
+        self.assertTemplateUsed(response, 'shop/product/list.html')
+
+        response = self.client.get('/first-category/')
+        self.assertTemplateUsed(response, 'shop/product/list.html')
 
     def test_context_category_empty_for_default(self):
-        # response = self.client.get('')
-        pass
+        response = self.client.get('/')
+        self.assertEqual(response.context['category'], None)
 
     def test_context_category_correct_for_slug(self):
-        pass
+        response = self.client.get('/first-category/')
+        category = Category.objects.get(slug='first-category')
+        self.assertEqual(response.context['category'], category)
 
     def test_context_category_404_for_wrong_slug(self):
-        pass
+        response = self.client.get('/third-category/')
+        self.assertEqual(response.status_code, 404)
 
     def test_context_categories_show_all(self):
-        pass
+        response = self.client.get('/')
+        categories = response.context['categories']
+        self.assertEqual(len(categories), 2)
 
     def test_context_products_show_available(self):
-        pass
+        response = self.client.get('/')
+        products = response.context['products']
+        self.assertEqual(len(products), 3)
+
+    def test_context_product_show_in_category(self):
+        response = self.client.get('/first-category/')
+        products = response.context['products']
+        self.assertEqual(len(products), 2)
 
 class ProductDetailTest(TestCase):
 
@@ -73,7 +89,10 @@ class ProductDetailTest(TestCase):
                                available=True)
 
     def test_render_correct_template(self):
-        pass
+        product = Product.objects.first()
+        product_url = '/%d/%s/' % (product.id, product.slug)
+        response = self.client.get(product_url)
+        self.assertTemplateUsed(response, 'shop/product/detail.html')
 
     def test_context_product_show_by_slug(self):
         pass
