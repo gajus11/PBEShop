@@ -94,8 +94,12 @@ class ProductDetailTest(TestCase):
         response = self.client.get(product_url)
         self.assertTemplateUsed(response, 'shop/product/detail.html')
 
-    def test_context_product_show_by_slug(self):
-        pass
+    def test_context_product_show_by_slug_and_id(self):
+        product = Product.objects.first()
+        product_url = '/%d/%s/' % (product.id, product.slug)
+        response = self.client.get(product_url)
+        self.assertEqual(response.context['product'], product)
 
     def test_context_product_404(self):
-        pass
+        response = self.client.get('/0/bad-slug/')
+        self.assertEqual(response.status_code, 404)
