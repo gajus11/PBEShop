@@ -40,6 +40,10 @@ INSTALLED_APPS = [
     'shop',
 ]
 
+PROJECT_APPS = [
+    'shop',
+]
+
 JENKINS_TASKS = (
     'django_jenkins.tasks.run_pep8',
     'django_jenkins.tasks.run_pyflakes',
