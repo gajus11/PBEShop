@@ -43,6 +43,7 @@ INSTALLED_APPS = [
 
 PROJECT_APPS = [
     'shop',
+    'cart',
 ]
 
 JENKINS_TASKS = (
