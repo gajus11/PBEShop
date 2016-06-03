@@ -39,11 +39,13 @@ INSTALLED_APPS = [
     'django_jenkins',
     'shop',
     'cart',
+    'orders',
 ]
 
 PROJECT_APPS = [
     'shop',
     'cart',
+    'orders',
 ]
 
 JENKINS_TASKS = (
