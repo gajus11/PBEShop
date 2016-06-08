@@ -11,13 +11,13 @@ class Order(models.Model):
     postal_code = models.CharField(max_length=20)
     city = models.CharField(max_length=100)
     created = models.DateTimeField(auto_now_add=True)
-    update = models.DateTimeField(auto_now=True)
+    updated = models.DateTimeField(auto_now=True)
     paid = models.BooleanField(default=False)
 
     class Meta:
         ordering = ('-created', )
 
-    def _str_(self):
+    def __str__(self):
         return 'Order {}'.format(self.id)
 
     def get_total_cost(self):

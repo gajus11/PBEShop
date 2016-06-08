@@ -6,7 +6,7 @@ from unittest.mock import Mock
 from ..views import cart_add, cart_detail, cart_remove
 from ..cart import Cart
 from ..forms import CartAddProductForm
-from shop.models import Product, Category
+from shop.factories import CategoryFactory, ProductFactory
 
 from decimal import Decimal
 
@@ -14,21 +14,9 @@ class CartViewTest(TestCase):
 
     def setUp(self):
         self.client = Client()
-        self.category = Category.objects.create(name='category', slug='slug')
-        self.product1 = Product.objects.create(category=self.category,
-                                               name='product 1',
-                                               slug='slug-1',
-                                               description='desc',
-                                               price=Decimal(1),
-                                               stock=1,
-                                               available=True)
-        self.product2 = Product.objects.create(category=self.category,
-                                               name='product 2',
-                                               slug='slug-2',
-                                               description='desc',
-                                               price=Decimal(1),
-                                               stock=1,
-                                               available=True)
+        self.category = CategoryFactory()
+        self.product1 = ProductFactory(category=self.category)
+        self.product2 = ProductFactory(category=self.category)
 
 class CartAddTest(CartViewTest):
     def setUp(self):

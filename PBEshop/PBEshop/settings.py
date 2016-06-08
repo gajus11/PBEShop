@@ -37,9 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_jenkins',
-    'shop',
-    'cart',
-    'orders',
 ]
 
 PROJECT_APPS = [
@@ -47,6 +44,8 @@ PROJECT_APPS = [
     'cart',
     'orders',
 ]
+
+INSTALLED_APPS += PROJECT_APPS
 
 JENKINS_TASKS = (
     'django_jenkins.tasks.run_pep8',

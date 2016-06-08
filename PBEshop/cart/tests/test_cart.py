@@ -7,7 +7,7 @@ from unittest.mock import Mock
 
 from ..cart import Cart
 
-from shop.models import Product, Category
+from shop.factories import CategoryFactory, ProductFactory
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -18,14 +18,8 @@ class CartTest(TestCase):
         self.client = Client()
         self.request = Mock()
         self.request.session = self.client.session
-        self.category = Category.objects.create(name='category', slug='slug')
-        self.product = Product.objects.create(category=self.category,
-                               name='name',
-                               slug='slug',
-                               description='desc',
-                               price=Decimal(1),
-                               stock=1,
-                               available=True)
+        self.category = CategoryFactory()
+        self.product = ProductFactory(category=self.category)
 
     def test_initialization(self):
         cart = Cart(self.request)
@@ -57,13 +51,7 @@ class CartTest(TestCase):
     def test_remove_element_not_exist(self):
         cart = Cart(self.request)
         cart.add(self.product)
-        product = Product.objects.create(category=self.category,
-                                         name='name',
-                                         slug='slug',
-                                         description='desc',
-                                         price=Decimal(2),
-                                         stock=2,
-                                         available=True)
+        product = ProductFactory(category=self.category)
         cart.remove(product)
         self.assertNotEqual(cart.cart, {})
         with self.assertRaises(KeyError):
@@ -78,13 +66,7 @@ class CartTest(TestCase):
             self.request.session[settings.CART_SESSION_ID]
 
     def test_get_total_price(self):
-        product = Product.objects.create(category=self.category,
-                                         name='name',
-                                         slug='slug',
-                                         description='desc',
-                                         price=Decimal(2),
-                                         stock=2,
-                                         available=True)
+        product = ProductFactory(category=self.category)
         cart = Cart(self.request)
         cart.add(self.product)
         cart.add(product, quantity=2)
@@ -92,13 +74,7 @@ class CartTest(TestCase):
         self.assertEqual(cart.get_total_price(), Decimal(total_price))
 
     def test_iteration(self):
-        product = Product.objects.create(category=self.category,
-                                         name='name',
-                                         slug='slug',
-                                         description='desc',
-                                         price=Decimal(2),
-                                         stock=2,
-                                         available=True)
+        product = ProductFactory(category=self.category)
         cart = Cart(self.request)
         cart.add(self.product)
         cart.add(product, quantity=2)
@@ -117,13 +93,7 @@ class CartTest(TestCase):
         self.assertEqual(i, 2)
 
     def test_len(self):
-        product = Product.objects.create(category=self.category,
-                                         name='name',
-                                         slug='slug',
-                                         description='desc',
-                                         price=Decimal(2),
-                                         stock=2,
-                                         available=True)
+        product = ProductFactory(category=self.category)
         cart = Cart(self.request)
         cart.add(self.product)
         cart.add(product, quantity=2)
