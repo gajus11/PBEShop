@@ -3,9 +3,12 @@ colorama==0.3.7
 coverage==4.1
 Django==1.9.6
 django-jenkins==0.18.1
+factory-boy==2.7.0
+fake-factory==0.5.7
 lazy-object-proxy==1.2.2
 Pillow==3.2.0
 pylint==1.5.5
+python-dateutil==2.5.3
 selenium==2.53.2
 six==1.10.0
 wrapt==1.10.8
