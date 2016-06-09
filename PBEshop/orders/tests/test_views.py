@@ -48,11 +48,11 @@ class OrderCreateTest(TestCase):
         self.assertEqual(order.items.count(), 3)
 
     def test_context_form_on_GET(self):
-        response = response = self.client.get('/orders/create/')
+        response = self.client.get('/orders/create/')
         form = response.context['form']
         self.assertIsInstance(form, OrderCreateForm)
 
     def test_context_cart_on_GET(self):
-        response = response = self.client.get('/orders/create/')
+        response = self.client.get('/orders/create/')
         cart = response.context['cart']
         self.assertEqual(len(cart.cart), 3)
