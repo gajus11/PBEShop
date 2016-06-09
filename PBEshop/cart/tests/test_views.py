@@ -1,10 +1,7 @@
 from django.test import TestCase
 from django.test.client import Client
 from django.conf import settings
-from unittest.mock import Mock
 
-from ..views import cart_add, cart_detail, cart_remove
-from ..cart import Cart
 from ..forms import CartAddProductForm
 from shop.factories import CategoryFactory, ProductFactory
 

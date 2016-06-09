@@ -4,47 +4,27 @@ from decimal import Decimal
 
 from ..views import product_list
 from ..models import Category, Product
+from ..factories import CategoryFactory, ProductFactory
 
 class ProductListTest(TestCase):
 
     def setUp(self):
         #create categories
-        category1 = Category(name='first category', slug='first-category')
-        category1.save()
-        category2 = Category(name='second category', slug='second-category')
-        category2.save()
+        self.category1 = CategoryFactory()
+        self.category2 = CategoryFactory()
 
         #create products
-        Product.objects.create(category=category1,
-                               name='first',
-                               slug='first',
-                               price=Decimal(1),
-                               stock=1,
-                               available=True)
-        Product.objects.create(category=category1,
-                               name='second',
-                               slug='second',
-                               price=Decimal(1),
-                               stock=1,
-                               available=True)
-        Product.objects.create(category=category2,
-                               name='third',
-                               slug='third',
-                               price=Decimal(1),
-                               stock=1,
-                               available=True)
-        Product.objects.create(category=category2,
-                               name='fourth',
-                               slug='fourth',
-                               price=Decimal(1),
-                               stock=1,
-                               available=False)
+        self.product1 = ProductFactory(category=self.category1)
+        self.product2 = ProductFactory(category=self.category1)
+        self.product3 = ProductFactory(category=self.category2)
+        self.product4 = ProductFactory(category=self.category2,
+                                       available=False)
 
     def test_render_correct_template(self):
         response = self.client.get('/')
         self.assertTemplateUsed(response, 'shop/product/list.html')
 
-        response = self.client.get('/first-category/')
+        response = self.client.get('/%s/' % (self.category1.slug))
         self.assertTemplateUsed(response, 'shop/product/list.html')
 
     def test_context_category_empty_for_default(self):
@@ -52,9 +32,8 @@ class ProductListTest(TestCase):
         self.assertEqual(response.context['category'], None)
 
     def test_context_category_correct_for_slug(self):
-        response = self.client.get('/first-category/')
-        category = Category.objects.get(slug='first-category')
-        self.assertEqual(response.context['category'], category)
+        response = self.client.get('/%s/' % (self.category1.slug))
+        self.assertEqual(response.context['category'], self.category1)
 
     def test_context_category_404_for_wrong_slug(self):
         response = self.client.get('/third-category/')
@@ -71,7 +50,7 @@ class ProductListTest(TestCase):
         self.assertEqual(len(products), 3)
 
     def test_context_product_show_in_category(self):
-        response = self.client.get('/first-category/')
+        response = self.client.get('/%s/' % (self.category1.slug))
         products = response.context['products']
         self.assertEqual(len(products), 2)
 
